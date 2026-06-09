@@ -2,9 +2,27 @@
 
 Standalone web app: upload a lecture PDF, pick or create a subject, and get a full **study pack** — summary, flashcards, scenarios, and a 10-question practice test.
 
-**Live repo:** [github.com/Alkabkabi1/summry-web](https://github.com/Alkabkabi1/summry-web)
-
 Everything lives inside this project folder (no dependency on other repos).
+
+---
+
+## Publish to GitHub
+
+This folder is its own git repo (like `portfolio/`). Target URL:
+
+**https://github.com/Alkabkabi1/summry-web**
+
+```powershell
+cd summry_web
+gh auth login          # one-time, if not signed in
+.\publish.ps1
+```
+
+Or manually:
+
+```powershell
+gh repo create summry-web --public --source=. --remote=origin --push
+```
 
 ---
 
