@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}Summry Web{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('serve_static', filename='assets/study-pack.css') }}">
+  <link rel="stylesheet" href="{{ url_for('serve_static', filename='hub.css') }}">
+</head>
+<body>
+  <div class="app-shell">
+    <header class="app-header">
+      <div>
+        <h1><a class="brand-link" href="{{ url_for('hub') }}">Summry Web</a></h1>
+        <p class="meta">{% block tagline %}PDF → summary → flashcards → practice test{% endblock %}</p>
+      </div>
+      <div class="header-actions">
+        {% if openai_configured is defined %}
+          {% if openai_configured %}
+            <span class="status-pill status-ok">AI summaries enabled</span>
+          {% else %}
+            <span class="status-pill status-basic">Basic mode</span>
+          {% endif %}
+        {% endif %}
+        <nav class="top-nav">
+          <a href="{{ url_for('hub') }}"{% if request.endpoint == 'hub' %} class="is-active"{% endif %}>Hub</a>
+          <a href="{{ url_for('new_subject') }}"{% if request.endpoint == 'new_subject' %} class="is-active"{% endif %}>New subject</a>
+          <a href="{{ url_for('help_page') }}"{% if request.endpoint == 'help_page' %} class="is-active"{% endif %}>Help</a>
+        </nav>
+      </div>
+    </header>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <div class="flash-wrap">
+          {% for category, message in messages %}
+            <div class="flash flash-{{ category }}">{{ message }}</div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+
+    {% block body %}{% endblock %}
+  </div>
+
+  {% block overlay %}{% endblock %}
+  {% block scripts %}{% endblock %}
+</body>
+</html>

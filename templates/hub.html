@@ -1,0 +1,149 @@
+{% extends "base.html" %}
+{% block title %}Summry Web — Hub{% endblock %}
+
+{% block body %}
+<div class="app-layout">
+  <aside class="subject-tabs" aria-label="Subjects">
+    <div class="tabs-head">
+      <h2>Subjects</h2>
+      <a class="tabs-add" href="{{ url_for('new_subject') }}">+ New</a>
+    </div>
+    {% if subjects %}
+      <ul class="tab-list">
+        {% for subject in subjects %}
+          <li>
+            <a
+              class="tab-link{% if subject.slug == active_slug %} is-active{% endif %}"
+              href="{{ url_for('hub', subject=subject.slug) }}"
+            >
+              {% if subject.code %}<span class="tab-code">{{ subject.code }}</span>{% endif %}
+              <span class="tab-name">{{ subject.name }}</span>
+              <span class="tab-count">{{ subject.packs|length }} pack{{ '' if subject.packs|length == 1 else 's' }}</span>
+            </a>
+          </li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <p class="tabs-empty">No subjects yet. <a href="{{ url_for('new_subject') }}">Create one</a> or upload a PDF below.</p>
+    {% endif %}
+  </aside>
+
+  <main class="subject-panel">
+    {% if active %}
+      <section class="card panel-intro">
+        <div class="panel-head">
+          <div>
+            {% if active.code %}<p class="panel-code">{{ active.code }}</p>{% endif %}
+            <h2>{{ active.name }}</h2>
+            {% if active.description %}
+              <p class="meta">{{ active.description }}</p>
+            {% endif %}
+          </div>
+          {% if active.packs %}
+            <a
+              class="btn btn-secondary"
+              href="{{ url_for('serve_study_pack', slug=active.slug, filename='index.html') }}"
+              target="_blank"
+              rel="noopener"
+            >
+              Open study pack index →
+            </a>
+          {% endif %}
+        </div>
+      </section>
+
+      <section class="card upload-card" id="upload">
+        <h3>Upload PDF to this subject</h3>
+        <p class="meta upload-note">
+          Pick an existing subject, or enter a new name to create one on upload.
+        </p>
+        <form class="upload-form" method="post" action="{{ url_for('upload') }}" enctype="multipart/form-data">
+          <div class="form-grid">
+            <label class="field">
+              <span>Existing subject</span>
+              <select name="subject_slug" id="subject_slug">
+                <option value="">— Create new (use fields below) —</option>
+                {% for subject in subjects %}
+                  <option value="{{ subject.slug }}"{% if subject.slug == active_slug %} selected{% endif %}>
+                    {{ subject.name }}
+                  </option>
+                {% endfor %}
+              </select>
+            </label>
+
+            <label class="field">
+              <span>New subject name</span>
+              <input type="text" name="new_subject_name" id="new_subject_name" placeholder="e.g. Database Systems" autocomplete="off">
+            </label>
+
+            <label class="field">
+              <span>Course code (optional)</span>
+              <input type="text" name="new_subject_code" id="new_subject_code" placeholder="e.g. CS3010" autocomplete="off">
+            </label>
+
+            <label class="field field-file">
+              <span>PDF file</span>
+              <input type="file" name="pdf" accept=".pdf,application/pdf" required>
+            </label>
+          </div>
+
+          <div class="form-actions">
+            <button type="submit" class="btn btn-primary">Generate study pack</button>
+          </div>
+        </form>
+      </section>
+
+      <section class="card packs-card" id="packs">
+        <h3>Study packs</h3>
+        {% if active.packs %}
+          <ol class="pack-list">
+            {% for pack in active.packs %}
+              <li class="pack-item">
+                <div>
+                  <a
+                    class="pack-title"
+                    href="{{ url_for('serve_study_pack', slug=active.slug, filename=pack.filename) }}"
+                    target="_blank"
+                    rel="noopener"
+                  >
+                    {{ pack.title }}
+                  </a>
+                  {% if pack.pdf_name %}
+                    <p class="meta pack-meta">From {{ pack.pdf_name }}</p>
+                  {% endif %}
+                </div>
+                <span class="tag tag-core">Exam prep</span>
+              </li>
+            {% endfor %}
+          </ol>
+        {% else %}
+          <p class="empty-state">No study packs yet. Upload a PDF above to create the first one.</p>
+        {% endif %}
+      </section>
+    {% else %}
+      <section class="card welcome-card">
+        <h2>Welcome to Summry Web</h2>
+        <p class="meta">Create a subject, upload a lecture PDF, and get a full study pack — summary, flashcards, and a practice test.</p>
+        <div class="welcome-actions">
+          <a class="btn btn-primary" href="{{ url_for('new_subject') }}">Create subject</a>
+          <a class="btn btn-secondary" href="{{ url_for('help_page') }}">How it works</a>
+        </div>
+      </section>
+    {% endif %}
+  </main>
+</div>
+{% endblock %}
+
+{% block overlay %}
+<div class="processing-overlay hidden" id="processing-overlay" aria-hidden="true">
+  <div class="processing-box">
+    <div class="spinner" aria-hidden="true"></div>
+    <p><strong>Processing your PDF…</strong></p>
+    <p class="meta">Extracting text, building summary, flashcards, and practice test.</p>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('serve_static', filename='hub.js') }}"></script>
+{% endblock %}

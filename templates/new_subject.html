@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}New subject — Summry Web{% endblock %}
+{% block tagline %}Create a subject before uploading PDFs{% endblock %}
+
+{% block body %}
+<section class="card form-page">
+  <a class="back-crumb" href="{{ url_for('hub') }}">← Back to hub</a>
+  <h2>Create subject</h2>
+  <p class="meta">Subjects group your lecture PDFs. You can also create one automatically when uploading.</p>
+
+  <form class="upload-form" method="post" action="{{ url_for('new_subject') }}">
+    <div class="form-grid">
+      <label class="field">
+        <span>Subject name *</span>
+        <input type="text" name="name" required placeholder="e.g. Operating Systems" autocomplete="off">
+      </label>
+      <label class="field">
+        <span>Course code</span>
+        <input type="text" name="code" placeholder="e.g. CS2016" autocomplete="off">
+      </label>
+      <label class="field">
+        <span>Description</span>
+        <input type="text" name="description" placeholder="Short description for the hub" autocomplete="off">
+      </label>
+    </div>
+    <div class="form-actions">
+      <button type="submit" class="btn btn-primary">Create subject</button>
+    </div>
+  </form>
+</section>
+{% endblock %}

@@ -1,0 +1,22 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+*.egg-info/
+.venv/
+venv/
+env/
+
+# Local env / secrets
+.env
+.env.*
+
+# User uploads & generated content (keep empty subjects.json)
+data/subjects/
+!data/subjects.json
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini

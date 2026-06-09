@@ -1,0 +1,18 @@
+Introduction to Software Products
+
+Software products are generic systems with functionality useful to a range of customers.
+A software product line is a set of products sharing a common core with customer-specific adaptations.
+Project-based engineering serves an external client with changing requirements over a long lifetime.
+Product engineering pursues a business opportunity with the developer deciding features and timing.
+
+Stand-alone execution runs all functionality on the customer computer.
+Hybrid execution provides partial functionality locally and additional features on vendor servers.
+Software as a service implements all product features on developer servers accessed via browser.
+
+A product vision answers what to build, who the customers are, and why they should buy.
+The product backlog is a prioritized to-do list of development work for the product.
+Product managers own vision, roadmap, backlog, acceptance testing, and customer testing.
+Prototypes should be built early and typically thrown away before production re-implementation.
+
+When choosing between custom and product engineering, the external client owns requirements in custom work.
+When comparing hybrid vs SaaS, hybrid keeps partial local execution while SaaS is fully remote.

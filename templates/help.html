@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% block title %}Help — Summry Web{% endblock %}
+{% block tagline %}How Summry Web works{% endblock %}
+
+{% block body %}
+<section class="card help-page">
+  <a class="back-crumb" href="{{ url_for('hub') }}">← Back to hub</a>
+  <h2>How it works</h2>
+
+  <ol class="help-steps">
+    <li>
+      <strong>Create or select a subject</strong>
+      <p class="meta">Subjects are folders under <code>summry_web/data/subjects/</code>. Use the sidebar tabs or <a href="{{ url_for('new_subject') }}">New subject</a>.</p>
+    </li>
+    <li>
+      <strong>Upload a PDF</strong>
+      <p class="meta">The app extracts text, builds a structured summary, flashcards, and a 10-question practice test.</p>
+    </li>
+    <li>
+      <strong>Open the study pack</strong>
+      <p class="meta">After processing, the page refreshes and the pack appears under that subject. Click it to read the full HTML study page.</p>
+    </li>
+  </ol>
+
+  <h3>What each study pack contains</h3>
+  <ul class="help-list">
+    <li><strong>Summary</strong> — TL;DR, key concepts, definitions, testable points, common confusions</li>
+    <li><strong>Scenarios</strong> — “When to use X vs Y” practice</li>
+    <li><strong>Flashcards</strong> — click to flip, tagged Core / Detail</li>
+    <li><strong>Practice test</strong> — multiple choice and true/false with answer key</li>
+  </ul>
+
+  <h3>AI vs basic mode</h3>
+  {% if openai_configured %}
+    <p class="meta status-line-ok">OpenAI API key detected — rich exam-prep summaries are enabled.</p>
+  {% else %}
+    <p class="meta">Without an API key, basic mode extracts summaries from the PDF text automatically. For richer packs, set:</p>
+    <pre class="help-code">$env:OPENAI_API_KEY = "your-key-here"</pre>
+  {% endif %}
+
+  <h3>Run the app</h3>
+  <pre class="help-code">cd summry_web
+pip install -r requirements.txt
+python app.py</pre>
+  <p class="meta">Then open <a href="http://127.0.0.1:5000/">http://127.0.0.1:5000/</a></p>
+
+  <h3>Run tests</h3>
+  <pre class="help-code">cd summry_web
+python -m pytest</pre>
+  <p class="meta">See <code>README.md</code> for full documentation.</p>
+
+  <h3>Folder layout (self-contained)</h3>
+  <pre class="help-code">summry_web/
+  app.py              # web server
+  pipeline/           # extract, summarize, generate
+  templates/          # hub, help, new subject pages
+  static/assets/      # study pack CSS &amp; JS
+  data/subjects/      # your uploads &amp; generated HTML</pre>
+</section>
+{% endblock %}
